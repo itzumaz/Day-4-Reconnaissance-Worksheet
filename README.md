@@ -30,8 +30,8 @@ whois example.com
 * **Objective:** Map backend infrastructure routing paths via IPv4 (A records), IPv6 (AAAA records), and third-party mail exchanges (MX).
 * **Execution:** Leveraged to query authoritative name servers and extract target destinations used for web and mail traffic components.
 ```bash
-dig example.com A +short
-dig example.com AAAA +short
+dig example.com A 
+dig example.com AAAA 
 nslookup -type=MX example.com 
 ```
 
@@ -56,8 +56,8 @@ traceroute example.com
 | Category / Layer | Tool Used | Key Technical Findings | Security & Operational Significance |
 | :--- | :--- | :--- | :--- |
 | **Domain Registration** | `whois` | **Registrar:** ICANN-Authorized<br>**Name Servers:** `a.iana-servers.net`, `b.iana-servers.net` | Identifies the hosting registrar entity holding administrative zone controls. |
-| **IP Routing (IPv4)** | `dig A` | **IPv4 Address:** `93.184.216.34` | Resolves human-readable domain text to a targetable public IPv4 node address. |
-| **IP Routing (IPv6)** | `dig AAAA` | **IPv6 Address:** `2606:2800:220:1:248:1893:25c8:1946` | Maps dual-stack network readiness and modern edge routing capabilities. |
+| **IP Routing (IPv4)** | `dig A` | **IPv4 Address:** `172.66.147.243` | Resolves human-readable domain text to a targetable public IPv4 node address. |
+| **IP Routing (IPv6)** | `dig AAAA` | **IPv6 Address:** `2606:4700:10::6814:179a` | Maps dual-stack network readiness and modern edge routing capabilities. |
 | **Mail Exchange** | `nslookup -type=MX` | **MX Target:** Outsourced Email Infrastructure (e.g., Zoho Mail) | Pinpoints third-party email routing dependencies handled outside the main core server. |
 | **HTTP Response Server** | `curl -I -L` | **Server Stack:** `LiteSpeed` | Identifies the running technology stack daemon, providing a base for version-vulnerability checks. |
 | **HTTP Security Headers** | `curl -I -L` | **Missing:** `Strict-Transport-Security`, `X-Frame-Options` | Evaluates vulnerabilities to client-side threat streams like Clickjacking or missing HTTPS enforcement. |

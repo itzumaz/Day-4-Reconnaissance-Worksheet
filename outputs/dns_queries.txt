@@ -1,0 +1,32 @@
+DNS Record Enumeration (dig / nslookup)
+
+# Query IPv4 Addresses
+
+┌──(kali㉿kali)-[~]
+└─$ dig trioscyber.com AAAA +short
+
+77.37.53.188
+77.37.83.57
+
+# Query IPv6 Addresses
+                                                                                                 
+┌──(kali㉿kali)-[~]
+└─$ dig trioscyber.com AAAA +short
+
+2a02:4780:23:256b:9d87:3e2c:ef4a:e07d
+2a02:4780:32:73af:4604:940:80a3:9861
+
+# Query Mail Exchange Records
+
+┌──(kali㉿kali)-[~]
+└─$ nslookup -type=MX trioscyber.com
+
+Server:		192.168.145.2
+Address:	192.168.145.2#53
+
+Non-authoritative answer:
+trioscyber.com	mail exchanger = 50 mx3.zoho.in.
+trioscyber.com	mail exchanger = 10 mx.zoho.in.
+trioscyber.com	mail exchanger = 20 mx2.zoho.in.
+
+Authoritative answers can be found from:

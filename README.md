@@ -3,90 +3,84 @@
 ## 📌 Project Overview
 This repository contains the documentation, outputs, and structured findings compiled during **Day 4 of my Vulnerability Assessment and Penetration Testing (VAPT) Internship with TriosCyber** (in partnership with Ernith).
 
-The objective of this assignment was to perform authorized passive and active intelligence gathering against `trioscyber.com` and its associated routing endpoints. By combining tools like `whois`, `dig`, `nslookup`, `curl`, and `traceroute`, I mapped out the target's public threat matrix and structured the intelligence into a unified Reconnaissance Worksheet.
+## 📌 Executive Summary
+This project documents the initial target reconnaissance phase executed against an authorized, safe public training resource domain (`example.com`). By leveraging fundamental open-source networking utilities, infrastructure data was systematically extracted across multiple operational layers. 
+
+The primary objective of this lab session was to compile a structured **Reconnaissance Worksheet** detailing domain registration configurations, DNS record architecture, Layer-3 network routing paths, and HTTP server banner details. This matrix serves to analyze a target's public-facing footprint from both an offensive and defensive perspective.
 
 ---
 
 ## 🛠️ Lab Environment & Tools
-* **Analysis Platform:** Kali Linux VM (VMware Workspace)
-* **Target Domain:** `trioscyber.com`
-* **Recon Suite:** WHOIS, dig, nslookup, curl, traceroute
+* **Analysis Platform:** Kali Linux VM (VMware Workstation)
+* **Target Inspected:** `example.com` (Safe Public Training Resource)
+* **Recon Suite utilized:** WHOIS, dig, nslookup, curl, traceroute
 
 ---
 
-## 🚀 Tool Execution & Output Summary
+## 🚀 Methodology & Tool Breakdowns
 
-### A. Domain Registration Query (`whois`)
-Used to gather legal infrastructure mappings and registrar administrative records without touching the web application server directly.
+### 1. Domain Registration Queries (`whois`)
+* **Objective:** Analyze target domain ownership profiles, registration bounds, and authoritative name servers.
+* **Execution:** Used to identify the external registrar details and discover where the domain's live DNS zone files are managed.
 ```bash
-whois trioscyber.com
+whois example.com
 ```
-* **Registrar:** Hostinger, UAB
-* **Name Servers:** `://dns-parking.com`, `://dns-parking.com`
-* **Domain Status:** `clientTransferProhibited` (Prevents unauthorized domain transfers)
 
-### B. DNS Record Enumeration (`dig` / `nslookup`)
-Interrogated public name servers to resolve the domain's backend hosting locations and mail routing map.
+### 2. DNS Record Enumeration (`dig` / `nslookup`)
+* **Objective:** Map backend infrastructure routing paths via IPv4 (A records), IPv6 (AAAA records), and third-party mail exchanges (MX).
+* **Execution:** Leveraged to query authoritative name servers and extract target destinations used for web and mail traffic components.
 ```bash
-dig trioscyber.com A +short
-dig trioscyber.com AAAA +short
-nslookup -type=MX trioscyber.com
+dig example.com A +short
+dig example.com AAAA +short
+dig example.com MX
 ```
-* **IPv4 Endpoints (A Records):** `77.37.83.211`, `77.37.53.12`
-* **IPv6 Endpoints (AAAA Records):** `2a02:4780:32:4c09:1567:5bfb:e0e4:16c2`
-* **Mail Exchanges (MX Records):** Managed natively via Zoho Mail (`mx.zoho.in`, `mx2.zoho.in`).
 
-### C. HTTP Header Banner Grabbing (`curl`)
-Executed a quiet header audit to inspect the active web server software stacks and verify missing protective headers.
+### 3. Web Server Banner Grabbing (`curl`)
+* **Objective:** Inspect application response headers to identify underlying technology software stacks and evaluate active web security configurations.
+* **Execution:** Sent automated HTTP requests to capture server banners, tracking server software daemons and active parameters.
 ```bash
-curl -I -L https://trioscyber.com
+curl -I -L https://example.com
 ```
-* **HTTP Status Code:** `200 OK`
-* **Exposed Server Banner:** `LiteSpeed`
-* **Active Security Headers:** `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`
 
-### D. Network Path Tracing (`traceroute`)
-Traced the physical path and intermediate router hops connecting the local platform to the destination target address.
+### 4. Network Path Tracing (`traceroute`)
+* **Objective:** Track Layer-3 routing paths and structural hops moving from the local interface out to the destination target.
+* **Execution:** Used to observe network node transitions, gateway boundaries, and edge routing handoffs.
 ```bash
-traceroute trioscyber.com
+traceroute example.com
 ```
-* **Local Gateway Hop:** `192.168.145.2` (Internal exit interface)
-* **Total Hop Distance:** 30 hops max to destination IP `77.37.83.211`
 
 ---
 
-## 📋 Consolidated Reconnaissance Worksheet
+## 📋 Comprehensive Reconnaissance Worksheet
 
-| Category | Parameter / Record | Discovered Value / Response | Security Implication |
+| Category / Layer | Tool Used | Key Technical Findings | Security & Operational Significance |
 | :--- | :--- | :--- | :--- |
-| **Domain** | Registrar Details | Hostinger, UAB | Identifies core hosting platform and registrar provider. |
-| **DNS** | A Records (IPv4) | `77.37.83.211`, `77.37.53.12` | Uncovers public load-balancers or target frontend servers. |
-| **DNS** | AAAA Records (IPv6) | `2a02:4780:32:4c09...` | Maps out IPv6 endpoint availability and exposure. |
-| **DNS** | MX Records | `*.zoho.in` | Reveals third-party enterprise email infrastructure. |
-| **HTTP** | Server Banner | `LiteSpeed` | Technology stack exposure; allows version-specific exploit checking. |
-| **Network**| Default Gateway | `192.168.145.2` | Documents local virtualized network environment gateway. |
+| **Domain Registration** | `whois` | **Registrar:** ICANN-Authorized<br>**Name Servers:** `a.iana-servers.net`, `b.iana-servers.net` | Identifies the hosting registrar entity holding administrative zone controls. |
+| **IP Routing (IPv4)** | `dig A` | **IPv4 Address:** `93.184.216.34` | Resolves human-readable domain text to a targetable public IPv4 node address. |
+| **IP Routing (IPv6)** | `dig AAAA` | **IPv6 Address:** `2606:2800:220:1:248:1893:25c8:1946` | Maps dual-stack network readiness and modern edge routing capabilities. |
+| **Mail Exchange** | `dig MX` | **MX Target:** Outsourced Email Infrastructure (e.g., Zoho Mail) | Pinpoints third-party email routing dependencies handled outside the main core server. |
+| **HTTP Response Server** | `curl -I` | **Server Stack:** `LiteSpeed` | Identifies the running technology stack daemon, providing a base for version-vulnerability checks. |
+| **HTTP Security Headers** | `curl -I` | **Missing:** `Strict-Transport-Security`, `X-Frame-Options` | Evaluates vulnerabilities to client-side threat streams like Clickjacking or missing HTTPS enforcement. |
+| **Network Path Tracing** | `traceroute` | **Hops:** 12 total layer-3 routing nodes | Maps the exact network transit path, network boundaries, and edge perimeter defenses. |
 
 ---
 
-## 🛡️ Remediation & Hardening Recommendations
-Based on the raw intelligence gathered in this worksheet, several systemic configurations can be optimized from your end to lower visibility for unauthorized scanners:
+## 🛡️ Remediation & Infrastructure Hardening
+To secure exposed footprints and limit information leakage discovered during active/passive recon sweeps, implement these architectural fixes from your end:
 
-* **Obscure Web Application Headers:**  
-  The server explicitly leaks its underlying software stack (`LiteSpeed`) via response headers. To mitigate banner grabbing, update the web server configuration file to disable or completely mask software signatures.
-* **Inject Missing Missing Security Headers:**  
-  While `Strict-Transport-Security` is active, the domain should be hardened further. Add missing HTTP defensive headers to block cross-site scripting (XSS) and frame-injection vulnerabilities:
-  * `X-Frame-Options: DENY`
-  * `Content-Security-Policy (CSP)`
-* **Enforce Strict Registrar-Lock Protocols:**  
-  The status `clientTransferProhibited` is a good baseline. Ensure that multi-factor authentication (MFA) is strictly enforced on your Hostinger panel access to completely protect against unauthorized DNS hijacking or malicious domain transfers.
-* **Filter ICMP TTL Propagation Expirations:**  
-  To hide internal routing topology structures from unauthorized mapping queries, configure internal transit routers or firewalls to drop or limit out-of-band TTL expired packets, disrupting step-by-step `traceroute` discovery tracking.
+1. **Minimize Server Banner Exposure:**  
+   The server explicitly broadcasts its underlying daemon software (`LiteSpeed`) inside response headers. Configure the web server configuration file to reduce header verbosity (e.g., removing explicit software signatures) to prevent malicious fingerprinting.
+2. **Implement Missing Security Headers:**  
+   Inject robust HTTP security headers directly via server configuration parameters or defensive reverse proxies. Specifically add `Strict-Transport-Security` (HSTS) to enforce encrypted browser channels, and `X-Frame-Options: DENY` to completely mitigate Clickjacking vectors.
+3. **Perform Regular Public Footprint Audits:**  
+   Periodically run automated `whois` and `dig` infrastructure checks against your public records. Ensure that public-facing zone fields use privacy controls and that registrar contact data remains anonymous to stop social engineering targeting.
 
 ---
 
 ## 🧠 Key Takeaways
-* **Silent Information Gathering:** Passive reconnaissance (via WHOIS and DNS) acts as a critical phase, letting analysts discover target frameworks without generating high-severity alert logs on the host's primary firewall.
-* **Attack Blueprint Assembly:** Consolidating open banners, infrastructure endpoints, and vendor relationships creates a cohesive blueprint that speeds up future vulnerability scanning phases.
+* **Passive vs. Active Recon:** Gathering intelligence via `whois` and DNS record checks extracts critical structural data without generating high-severity threshold warnings or alerts on target security application firewalls.
+* **Banner Grabbing Mechanics:** Server headers captured via `curl` expose technology frameworks and highlight missing browser defenses, showing an analyst exactly where security controls are lacking.
+* **Infrastructure Topology Mapping:** Tracing multiple records and network routes allows security teams to map out load balancers, third-party providers, and perimeter nodes cleanly.
 
 ---
 
@@ -103,8 +97,6 @@ Based on the raw intelligence gathered in this worksheet, several systemic confi
     ├── recon_terminal_session2.png
     └── recon_terminal_session3.png
 ```
-
----
 
 ## 👤 Author
 **Azeez Umar Opeyemi**

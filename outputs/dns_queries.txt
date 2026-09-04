@@ -1,32 +1,56 @@
-DNS Record Enumeration (dig / nslookup)
+┌──(kali㉿kali)-[~/outputs]
+└─$ dig example.com A && dig example.com AAAA > dns_queries.txt
 
-# Query IPv4 Addresses
+; <<>> DiG 9.20.26-1-Debian <<>> example.com A
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 35400
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; MBZ: 0x0005, udp: 1232
+;; QUESTION SECTION:
+;example.com.                   IN      A
+
+;; ANSWER SECTION:
+example.com.            5       IN      A       172.66.147.243
+example.com.            5       IN      A       104.20.23.154
+
+;; Query time: 317 msec
+;; SERVER: 192.168.145.2#53(192.168.145.2) (UDP)
+;; WHEN: Fri Sep 04 05:02:03 EDT 2026
+;; MSG SIZE  rcvd: 72
+
+
+; <<>> DiG 9.20.26-1-Debian <<>> example.com AAAA
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 49633
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; MBZ: 0x0005, udp: 1232
+;; QUESTION SECTION:
+;example.com.			IN	AAAA
+
+;; ANSWER SECTION:
+example.com.		5	IN	AAAA	2606:4700:10::6814:179a
+example.com.		5	IN	AAAA	2606:4700:10::ac42:93f3
+
+;; Query time: 2373 msec
+;; SERVER: 192.168.145.2#53(192.168.145.2) (UDP)
+;; WHEN: Fri Sep 04 05:02:06 EDT 2026
+;; MSG SIZE  rcvd: 96
+
 
 ┌──(kali㉿kali)-[~]
-└─$ dig trioscyber.com AAAA +short
-
-77.37.53.188
-77.37.83.57
-
-# Query IPv6 Addresses
-                                                                                                 
-┌──(kali㉿kali)-[~]
-└─$ dig trioscyber.com AAAA +short
-
-2a02:4780:23:256b:9d87:3e2c:ef4a:e07d
-2a02:4780:32:73af:4604:940:80a3:9861
-
-# Query Mail Exchange Records
-
-┌──(kali㉿kali)-[~]
-└─$ nslookup -type=MX trioscyber.com
+└─$ nslookup -type=MX example.com 
 
 Server:		192.168.145.2
 Address:	192.168.145.2#53
 
 Non-authoritative answer:
-trioscyber.com	mail exchanger = 50 mx3.zoho.in.
-trioscyber.com	mail exchanger = 10 mx.zoho.in.
-trioscyber.com	mail exchanger = 20 mx2.zoho.in.
+example.com	mail exchanger = 0 .
 
 Authoritative answers can be found from:
+

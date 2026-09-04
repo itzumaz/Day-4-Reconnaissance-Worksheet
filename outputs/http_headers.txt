@@ -1,36 +1,23 @@
-HTTP Header Banner Grabbing (curl)
-
 ┌──(kali㉿kali)-[~]
-└─$ curl -I -L https://trioscyber.com
+└─$ curl -I -L https://example.com  
 
 HTTP/2 200 
-date: Fri, 04 Sep 2026 07:13:17 GMT
-content-type: text/html; charset=UTF-8
-vary: Accept-Encoding
-x-powered-by: PHP/8.5.5
-x-dns-prefetch-control: on
-permissions-policy: private-state-token-redemption=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com"), private-state-token-issuance=(self "https://www.google.com" "https://www.gstatic.com" "https://recaptcha.net" "https://challenges.cloudflare.com" "https://hcaptcha.com")
-link: <https://trioscyber.com/wp-json/>; rel="https://api.w.org/"
-link: <https://trioscyber.com/wp-json/wp/v2/pages/25>; rel="alternate"; title="JSON"; type="application/json"
-link: <https://trioscyber.com/>; rel=shortlink
-etag: W/"4212-1788339937;gz"
-x-litespeed-cache: hit
-platform: hostinger
-panel: hpanel
-content-security-policy: upgrade-insecure-requests
-age: 160
-server: hcdn
-alt-svc: h3=":443"; ma=86400
-x-hcdn-request-id: 44d069f9e3e68ebcf3c255809efe39b1-srv-edge5
-x-hcdn-cache-status: HIT
+date: Fri, 04 Sep 2026 09:14:06 GMT
+content-type: text/html
+server: cloudflare
+last-modified: Wed, 02 Sep 2026 22:14:26 GMT
+allow: GET, HEAD
+accept-ranges: bytes
+age: 2713
+cf-cache-status: HIT
+cf-ray: a35be1cc8e12d593-AMS
 
-Network Path Tracing (traceroute)
                                                                                                      
 ┌──(kali㉿kali)-[~]
-└─$ traceroute trioscyber.com
-     
-traceroute to trioscyber.com (91.108.98.22), 30 hops max, 60 byte packets
- 1  192.168.145.2 (192.168.145.2)  5.930 ms  5.600 ms  5.279 ms
+└─$ traceroute example.com
+
+traceroute to example.com (172.66.147.243), 30 hops max, 60 byte packets
+ 1  192.168.145.2 (192.168.145.2)  7.070 ms  6.621 ms  5.809 ms
  2  * * *
  3  * * *
  4  * * *

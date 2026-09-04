@@ -32,7 +32,7 @@ whois example.com
 ```bash
 dig example.com A +short
 dig example.com AAAA +short
-nslookup MX example.com 
+nslookup -type=MX example.com 
 ```
 
 ### 3. Web Server Banner Grabbing (`curl`)
@@ -58,7 +58,7 @@ traceroute example.com
 | **Domain Registration** | `whois` | **Registrar:** ICANN-Authorized<br>**Name Servers:** `a.iana-servers.net`, `b.iana-servers.net` | Identifies the hosting registrar entity holding administrative zone controls. |
 | **IP Routing (IPv4)** | `dig A` | **IPv4 Address:** `93.184.216.34` | Resolves human-readable domain text to a targetable public IPv4 node address. |
 | **IP Routing (IPv6)** | `dig AAAA` | **IPv6 Address:** `2606:2800:220:1:248:1893:25c8:1946` | Maps dual-stack network readiness and modern edge routing capabilities. |
-| **Mail Exchange** | `nslookup MX` | **MX Target:** Outsourced Email Infrastructure (e.g., Zoho Mail) | Pinpoints third-party email routing dependencies handled outside the main core server. |
+| **Mail Exchange** | `nslookup -type=MX` | **MX Target:** Outsourced Email Infrastructure (e.g., Zoho Mail) | Pinpoints third-party email routing dependencies handled outside the main core server. |
 | **HTTP Response Server** | `curl -I -L` | **Server Stack:** `LiteSpeed` | Identifies the running technology stack daemon, providing a base for version-vulnerability checks. |
 | **HTTP Security Headers** | `curl -I -L` | **Missing:** `Strict-Transport-Security`, `X-Frame-Options` | Evaluates vulnerabilities to client-side threat streams like Clickjacking or missing HTTPS enforcement. |
 | **Network Path Tracing** | `traceroute` | **Hops:** 12 total layer-3 routing nodes | Maps the exact network transit path, network boundaries, and edge perimeter defenses. |
